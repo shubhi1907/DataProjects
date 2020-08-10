@@ -1,2 +1,2 @@
 # DataScience
-what I learn and try out during my journey to become a data scientist, will be shared here.
+what I learn and try out during my journey towards breaking into data science, will be shared here.
