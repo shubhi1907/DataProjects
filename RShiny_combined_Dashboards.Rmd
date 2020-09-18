@@ -1,0 +1,358 @@
+
+
+```{D1}
+
+library(shiny)
+
+library(plotly)
+
+library(ggplot2)
+
+d<- read.csv(file.choose(), header=T,sep = ",")
+
+attach(d)
+#d$CLASS <- as.vector(d$CLASS)
+#data$fertility<-as.vector(data$fertility)    
+#head(d$CLASS)
+#colSums(is.na(d))
+
+#d=na.omit(d)
+
+#selected<-c(CLASS)
+#Elementary <- Student.Grade.Level <= "L5"
+
+ui<-fluidPage(sidebarPanel(
+  
+  selectInput(inputId = "y", label="y-axis:", width = "auto", choices = c("Escaleds" = "Escaleds",
+                                                         
+                                                         "Mscaleds" = "Mscaleds",
+                                                         
+                                                         "Sscaleds" = "Sscaleds"),selected = "Escaleds"),
+
+   selectInput(inputId = "x",
+  
+               label = "X-axis:",
+  
+               choices = c("Year.of.Graduation" = "Year.of.Graduation",
+                           "Student.Grade.Level" = "Student.Grade.Level",
+                           "Schname1"="Schname1"
+                           
+                           ),selected = "Year.of.Graduation"),
+  
+  
+  #sliderInput(data$CLASS,label = "CLASS", min = 2013,max =2025,value = c(2013,2025))),
+  
+  mainPanel( plotOutput(outputId = "LineChart",width = "900"), width = "900",
+             
+             textOutput(outputId = "text1")) )) 
+
+
+
+
+server<-function(input,output) {output$text1<-renderText({
+  
+  paste("O means the students not in the Individual program, 1 means the the students in the Individual program")})
+
+output$LineChart <- renderPlot({
+    ggplot(data = d, aes_string(x=input$x, y=input$y, fill=factor(IEP)), size = "auto") + 
+    geom_bar(position = "dodge", stat = "identity") + ylab("Score") + 
+    xlab(input$x) + theme(legend.position="bottom" 
+                                ,plot.title = element_text(size=15, face="bold")) + 
+    ggtitle("Is Individual education program helpful for students?") + labs(fill = "IEP")
+ # ggplot(data = d, aes_string(x = input$x,y = input$y, fill = as.factor(IEP))) 
+  #+    geom_smooth(method = "lm", se=FALSE, show.legend=TRUE)
+  
+  
+  
+})
+
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+```{D2}
+library(shiny)
+
+library(plotly)
+
+library(ggplot2)
+#dataStud <- read.csv('Tableau output file')
+d<- read.csv(file.choose(), header=T,sep = ",")
+
+attach(d)
+#d$CLASS <- as.vector(d$CLASS)
+#data$fertility<-as.vector(data$fertility)    
+#head(d$CLASS)
+#colSums(is.na(d))
+
+#d=na.omit(d)
+
+#selected<-c(CLASS)
+
+ui<-fluidPage(sidebarPanel(
+  
+  selectInput(inputId = "y", label="y-axis:", width = "auto", choices = c("Escaleds" = "Escaleds",
+                                                         
+                                                         "Mscaleds" = "Mscaleds",
+                                                         
+                                                         "Sscaleds" = "Sscaleds"),selected = "Escaleds"),
+
+   selectInput(inputId = "x",
+  
+               label = "X-axis:",
+  
+               choices = c("Year.of.Graduation" = "Year.of.Graduation",
+                           "Schname1"="Schname1",
+                          "Gender" = "Gender" ),selected = "Year.of.Graduation"),
+  
+  
+  #sliderInput(data$CLASS,label = "CLASS", min = 2013,max =2025,value = c(2013,2025))),
+  
+  mainPanel(plotOutput(outputId = "LineChart",width = "900"), width = "900",
+             
+             textOutput(outputId = "text1")) ),
+            plotOutput(outputId = "BarChart",width = "900"), width = "900", 
+            textOutput("text2")) 
+
+
+server<-function(input,output) {output$text1<-renderText({
+  
+  paste("The chart shows the Mcas scores, grouped by race:A = Asian
+                                                          B = African american
+                                                          H = Hispanic 
+                                                          N = Not disclosed 
+                                                          P = Pacific Islander
+                                                          W = White
+                                                          ")})
+
+output$LineChart <- renderPlot({
+    ggplot(data = d, aes_string(x=input$x, y=input$y, fill=factor(Race.Off)), size = "auto") + 
+    geom_bar(position = "dodge", stat = "identity") + ylab("Score") + 
+    xlab(input$x) + theme(legend.position="bottom" 
+                                ,plot.title = element_text(size=15, face="bold")) + 
+    ggtitle("MCAS Score gouped by RACE") + labs(fill = "RACE")
+
+})
+  
+
+
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+```{D3}
+
+library(shiny)
+
+library(plotly)
+
+library(ggplot2)
+
+#setwd("C:/Users/shubh/Desktop/Comm & Viz/Week 4/")
+# d <- read.csv("Tableau output file - Copy.csv")
+d<- read.csv(file.choose(), header=T,sep = ",")
+
+attach(d)
+
+
+#d=na.omit(d)
+
+
+ui<-fluidPage(sidebarPanel(
+  
+  selectInput(inputId = "y", label="y-axis:", width = "auto", choices = c("English" = "Escaleds"
+                                                                                     ),selected = "Escaleds"),
+
+   selectInput(inputId = "x",
+  
+               label = "X-axis:",
+  
+               choices = c("Graduation_Year" = "Year.of.Graduation",
+                           "Grade_Level" = "Student.Grade.Level",
+                           "Performance" = "S.Performance",
+                           "School" = "Schname1"
+                           ),selected = "Year.of.Graduation"),
+  
+  
+
+  mainPanel( plotOutput(outputId = "LineChart",width = "900"), width = "900",
+             
+             textOutput(outputId = "text1") 
+             ) )) 
+
+
+
+
+server<-function(input,output) {output$text1<-renderText({
+  
+  #paste("The chart shows the English Mcas of Ell's and non-Ell students")
+  })
+
+output$LineChart <- renderPlot({
+    ggplot(data = d, aes_string(x=input$x, y=input$y, fill=factor(Ever.Ell1)), size = "auto") + 
+    geom_bar(position = "dodge", stat = "identity") + ylab(input$y) + 
+    xlab(input$x) + theme(legend.position="bottom" 
+                                ,plot.title = element_text(size=15, face="bold")) + 
+    ggtitle("English Language Learner's MCAS Score") + labs(fill = "ELL")
+ # ggplot(data = d, aes_string(x = input$x,y = input$y, fill = as.factor(Ever.Ell1))) 
+  #+    geom_smooth(method = "lm", se=FALSE, show.legend=TRUE)
+  
+  
+  
+})
+
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+```{D4}
+
+library(shiny)
+
+library(plotly)
+
+library(ggplot2)
+
+d <- read.csv(file.choose(), header=T,sep = ",")
+
+attach(d)
+#d$CLASS <- as.vector(d$CLASS)
+#data$fertility<-as.vector(data$fertility)    
+#head(d$CLASS)
+#colSums(is.na(d))
+
+#d=na.omit(d)
+
+#selected<-c(CLASS)
+#Elementary <- Student.Grade.Level <= "L5"
+
+ui<-fluidPage(sidebarPanel(
+  
+  selectInput(inputId = "y", label="y-axis:", width = "auto", choices = c("Escaleds" = "Escaleds",
+                                                         
+                                                         "Mscaleds" = "Mscaleds",
+                                                         
+                                                         "Sscaleds" = "Sscaleds"),selected = "Escaleds"),
+
+   selectInput(inputId = "x",
+  
+               label = "X-axis:",
+  
+               choices = c("Year.of.Graduation" = "Year.of.Graduation",
+                           "Student.Grade.Level" = "Student.Grade.Level",
+                           "Schname1"="Schname1"
+                          ),selected = "Year.of.Graduation"),
+  
+  
+  #sliderInput(data$CLASS,label = "CLASS", min = 2013,max =2025,value = c(2013,2025))),
+  
+  mainPanel( plotOutput(outputId = "LineChart",width = "900"), width = "900",
+             
+             textOutput(outputId = "text1")) )) 
+
+
+
+
+server<-function(input,output) {output$text1<-renderText({
+  
+  paste("The chart shows how Plan504 effects students' MCAS performance from different aspects like years, grade level and schools.
+             1: Students in Plan504        0: Students not in Plan504")})
+
+output$LineChart <- renderPlot({
+    ggplot(data = d, aes_string(x=input$x, y=input$y, fill=factor(Plan504.Off)), size = "auto") + 
+    geom_bar(position = "dodge", stat = "identity") + ylab("Score") + 
+    xlab(input$x) + theme(legend.position="bottom" 
+                                ,plot.title = element_text(size=15, face="bold")) + 
+    ggtitle("how Plan504 effects students' MCAS performance") + labs(fill = "PLAN504")
+ # ggplot(data = d, aes_string(x = input$x,y = input$y, fill = as.factor(Ever.Ell1))) 
+  #+    geom_smooth(method = "lm", se=FALSE, show.legend=TRUE)
+  
+  
+  
+})
+
+}
+
+shinyApp(ui = ui, server = server)
+
+
+```
+
+```{D5}
+
+library(shiny)
+
+library(plotly)
+
+library(ggplot2)
+
+d<- read.csv(file.choose(), header=T,sep = ",")
+
+attach(d)
+#d$CLASS <- as.vector(d$CLASS)
+#data$fertility<-as.vector(data$fertility)    
+#head(d$CLASS)
+#colSums(is.na(d))
+
+#d=na.omit(d)
+
+#selected<-c(CLASS)
+#Elementary <- Student.Grade.Level <= "L5"
+
+ui<-fluidPage(sidebarPanel(
+  
+  selectInput(inputId = "y", label="y-axis:", width = "auto", choices = c("Escaleds" = "Escaleds",
+                                                                          
+                                                                          "Mscaleds" = "Mscaleds",
+                                                                          
+                                                                          "Sscaleds" = "Sscaleds"),selected = "Escaleds"),
+  
+  selectInput(inputId = "x",
+              
+              label = "X-axis:",
+              
+              choices = c("Year.of.Graduation" = "Year.of.Graduation",
+                          "Schname1"="Schname1"
+
+                          
+              ),selected = "Year.of.Graduation"),
+  
+  
+  #sliderInput(data$CLASS,label = "CLASS", min = 2013,max =2025,value = c(2013,2025))),
+  
+  mainPanel( plotOutput(outputId = "LineChart",width = "900"), width = "900",
+             
+             textOutput(outputId = "text1")) )) 
+
+
+
+
+server<-function(input,output) {output$text1<-renderText({
+  
+  paste("O means the students not in the Individual program, 1 means the the students in the Individual program")})
+
+output$LineChart <- renderPlot({
+  ggplot(data = d, aes_string(x=input$x, y=input$y, fill=factor(Student.Grade.Level)), size = "auto") + 
+    geom_bar(position = "dodge", stat = "identity") + ylab("Score") + 
+    xlab(input$x) + theme(legend.position="bottom" 
+                          ,plot.title = element_text(size=15, face="bold")) + 
+    ggtitle("what is average performance of the students in each grade divided by school and class  ") + labs(fill = "SCORE")
+  # ggplot(data = d, aes_string(x = input$x,y = input$y, fill = as.factor(IEP))) 
+  #+    geom_smooth(method = "lm", se=FALSE, show.legend=TRUE)
+  
+  
+  
+})
+
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+
+
